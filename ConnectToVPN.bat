@@ -2,7 +2,7 @@
 setlocal
 
 :: Specify the name of the VPN connection you want to connect to
-set "VPNConnectionName=Sygic VPN X"
+set "VPNConnectionName=Sygic VPN"
 
 :: Check the status of the VPN connection
 rasdial "%VPNConnectionName%" | find "connected"
