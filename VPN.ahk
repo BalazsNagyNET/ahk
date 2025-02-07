@@ -17,8 +17,8 @@ if (ActiveWindowTitle = ConnectWindowTitle) {
     ; Wait until connection is established
     WinWaitClose, %ConncetingWindowTitle%
 
-    RDPServer := "tag-1354.sygic.local"
-    Run, mstsc.exe /v:%RDPServer% ; Launch RDP connection to the specified server
+    RDPFile := "tag-1354.rdp"
+    Run, %RDPFile% ; Launch RDP connection using the .rdp file
 }
 else {
     MsgBox Disconnected
