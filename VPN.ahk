@@ -16,7 +16,7 @@ if (ActiveWindowTitle = ConnectWindowTitle) {
     Sleep, 1000
     ; Wait until connection is established
     WinWaitClose, %ConncetingWindowTitle%
-
+    ;identify monitors: mstsc /l
     RDPFile := "tag-1354.rdp"
     Run, %RDPFile% ; Launch RDP connection using the .rdp file
 }
