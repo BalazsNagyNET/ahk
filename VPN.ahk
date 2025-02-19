@@ -16,8 +16,39 @@ if (ActiveWindowTitle = ConnectWindowTitle) {
     Sleep, 1000
     ; Wait until connection is established
     WinWaitClose, %ConncetingWindowTitle%
-    ;identify monitors: mstsc /l
+    
+    ; Identify monitors: mstsc /l
+    RunWait, %ComSpec% /c mstsc /l > monitor_list.txt,, Hide
+    FileRead, MonitorList, monitor_list.txt
+    
+    ; Parse the output to find the two monitors with the highest resolutions
+    MonitorArray := []
+    Loop, Parse, MonitorList, `n, `r
+    {
+        if (RegExMatch(A_LoopField, "Monitor (\d+): (\d+) x (\d+)", Match))
+        {
+            MonitorIndex := Match1
+            MonitorWidth := Match2
+            MonitorHeight := Match3
+            MonitorResolution := MonitorWidth * MonitorHeight
+            MonitorArray.Push({Index: MonitorIndex, Resolution: MonitorResolution})
+        }
+    }
+    
+    ; Sort the monitors by resolution in descending order
+    MonitorArray.Sort("a.Resolution > b.Resolution")
+    
+    ; Get the indices of the two monitors with the highest resolutions
+    Monitor1 := MonitorArray[1].Index
+    Monitor2 := MonitorArray[2].Index
+    
+    ; Update the selectedmonitors line in the RDP file
     RDPFile := "tag-1354.rdp"
+    FileRead, RDPContent, %RDPFile%
+    RDPContent := RegExReplace(RDPContent, "selectedmonitors:s:\d+,\d+", "selectedmonitors:s:" . Monitor1 . "," . Monitor2)
+    FileDelete, %RDPFile%
+    FileAppend, %RDPContent%, %RDPFile%
+    
     Run, %RDPFile% ; Launch RDP connection using the .rdp file
 }
 else {
