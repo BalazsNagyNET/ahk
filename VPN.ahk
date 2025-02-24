@@ -19,7 +19,7 @@ if (ActiveWindowTitle = ConnectWindowTitle) {
     ;identify monitors: mstsc /l
     RDPFile := "tag-1354.rdp"
     ; Call the Python script to update the RDP file
-    RunWait, python update_rdp_monitors.py
+    RunWait, py update_rdp_monitors.py
     Run, %RDPFile% ; Launch RDP connection using the .rdp file
 }
 else {
