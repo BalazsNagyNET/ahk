@@ -23,6 +23,6 @@ if (ActiveWindowTitle = ConnectWindowTitle) {
     Run, %RDPFile% ; Launch RDP connection using the .rdp file
 }
 else {
-    MsgBox Disconnected
+    TrayTip, AHK VPN disconnect, Disconnected from VPN , 5, 17
 }
 return
