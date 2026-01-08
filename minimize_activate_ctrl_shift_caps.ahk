@@ -1,26 +1,28 @@
 #SingleInstance force
 #InstallKeybdHook
 #UseHook
-
 SetTitleMatchMode, 2
-min := true
 
-;Toggle Action (Min/Max) Win+Shift+Caps
-;In case your last window is minned and you want to min a new window
-#+CapsLock::
-min := !min
-return
+global WinID := "", WinMinMax := 0, WinX := "", WinY := "", WinW := "", WinH := ""
 
-;Toggle window state Ctrl+Shift+Caps 
-^+CapsLock::
-if (min == true)
-{
-    WinGetTitle, WinLastTitle, A
-    WinMinimize, A 
++CapsLock::
+
+if (WinID) {
+    if WinExist("ahk_id " WinID) {
+        WinRestore, ahk_id %WinID%
+        if (WinMinMax = 1)
+            WinMaximize, ahk_id %WinID%
+        else
+            WinMove, ahk_id %WinID%,, WinX, WinY, WinW, WinH
+        WinActivate, ahk_id %WinID%
+    }
+    WinID := ""
 } else {
-    WinActivate, %WinLastTitle%
+    WinGet, WinID, ID, A
+    if (WinID) {
+        WinGetPos, WinX, WinY, WinW, WinH, ahk_id %WinID%
+        WinGet, WinMinMax, MinMax, ahk_id %WinID%
+        WinMinimize, ahk_id %WinID%
+    }
 }
-
-min := !min
-
 return
