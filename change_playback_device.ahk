@@ -6,17 +6,21 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 #a::
-	toggle:=!toggle ; This toggles the variable between true/false
-	if toggle
-	{
-		Run nircmd setdefaultsounddevice "Speakers"
-		soundToggleBox("Speakers")
-	}
-	else
-	{
-		Run nircmd setdefaultsounddevice "Headset"
-		soundToggleBox("Headset")
-	}
+	; Define device list in order of preference
+	global currentDeviceIndex
+	devices := ["Speakers", "Headset", "Earbuds"]
+	
+	; Initialize index if not set
+	if (currentDeviceIndex = "")
+		currentDeviceIndex := 0
+	
+	; Move to next device (cycle around)
+	currentDeviceIndex := Mod(currentDeviceIndex, devices.Length()) + 1
+	nextDevice := devices[currentDeviceIndex]
+	
+	; Set the new default device
+	Run nircmd setdefaultsounddevice "%nextDevice%"
+	soundToggleBox(nextDevice)
 Return
 
 ; Display sound toggle GUI
