@@ -1,7 +1,8 @@
-; Win+A: cycle the default audio playback device on the LOCAL machine.
+; Ctrl+Alt+A: cycle the default audio playback device on the LOCAL machine.
 ; Works even while a Windows App remote session has keyboard focus - the
-; hotkey is hooked and rebound on session focus, same trick as RDPHotkeyHelper,
-; so the keystroke never reaches the remote machine.
+; hooked hotkey intercepts the keystroke before msrdc gets it, so it never
+; reaches the remote machine. (Win+key combos can't be used here: msrdc's
+; own low-level hook consumes those first and re-routes them to the session.)
 #Requires AutoHotkey v2.0
 #SingleInstance Force
 Persistent
@@ -13,7 +14,7 @@ CurrentDeviceIndex := 0
 ToastGui := 0
 
 #UseHook
-#a:: {
+^!a:: {
     global CurrentDeviceIndex
     CurrentDeviceIndex := Mod(CurrentDeviceIndex, Devices.Length) + 1
     nextDevice := Devices[CurrentDeviceIndex]
