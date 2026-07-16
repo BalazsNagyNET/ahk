@@ -38,10 +38,14 @@ HideToast() {
     }
 }
 
-; Rebind the hotkey whenever a session gains focus, otherwise it stops
-; working in fullscreen mode and the keystroke goes to the remote machine.
+; msrdc installs its own low-level keyboard hook when the session gains
+; focus and eats Win+key combos before we see them (media keys pass through
+; it, Win combos do not). Force-reinstall our hook after each activation so
+; it sits in front of msrdc's in the hook chain.
 Loop {
     WinWaitActive SessionWin
+    Sleep 500
+    InstallKeybdHook true, true
     Suspend true
     Suspend false
     WinWaitNotActive SessionWin
