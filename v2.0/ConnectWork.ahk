@@ -53,7 +53,7 @@ VpnTimeoutSec := 180
         TrayTip "Connect button not found in FortiClient", "Connect Work", 3
         return
     }
-    Sleep ColdStart ? 2500 : 300
+    Sleep ColdStart ? 1000 : 300
     Loop 2 {
         Click 433, 488
         ; Success = screen changes (connecting view or SSO browser on top)
