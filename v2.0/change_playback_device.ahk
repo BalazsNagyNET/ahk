@@ -1,4 +1,5 @@
-; Ctrl+Alt+A: cycle the default audio playback device on the LOCAL machine.
+; Ctrl+Alt+S: cycle the default audio playback device on the LOCAL machine.
+; (Not Ctrl+Alt+A - that is KeePass global auto-type.)
 ; Works even while a Windows App remote session has keyboard focus - the
 ; hooked hotkey intercepts the keystroke before msrdc gets it, so it never
 ; reaches the remote machine. (Win+key combos can't be used here: msrdc's
@@ -14,7 +15,7 @@ CurrentDeviceIndex := 0
 ToastGui := 0
 
 #UseHook
-^!a:: {
+^!s:: {
     global CurrentDeviceIndex
     CurrentDeviceIndex := Mod(CurrentDeviceIndex, Devices.Length) + 1
     nextDevice := Devices[CurrentDeviceIndex]
