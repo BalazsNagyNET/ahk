@@ -23,7 +23,7 @@ global VpnTimeoutSec := 180
     ; If the client itself is not running, bail; otherwise open its window.
     ColdStart := false
     if !WinExist(FortiWinTitle) {
-        Process, Exist, FortiClient.exe
+        Process, Exist, FortiTray.exe
         if (!ErrorLevel) {
             TrayTip, Connect Work, FortiClient is not running - start it first, 10, 3
             return
