@@ -8,7 +8,7 @@ class `TscShellContainerClass`, window title = device name).
 
 | Hotkey | Script | What it does |
 |---|---|---|
-| Ctrl+Alt+W | `ConnectWork.ahk` | Connect FortiClient VPN (SSO), then open the workstation in Windows App |
+| Ctrl+Alt+W | `ConnectWork.ahk` | Connect FortiClient VPN (SSO, auto-picks account and cleans up the browser tab), then open the workstation in Windows App |
 | Ctrl+Alt+S | `change_playback_device.ahk` | Cycle local default playback device (Speakers → Headset → Earbuds), works inside the remote session |
 | Shift+CapsLock | `minimize_activate_shift_caps.ahk` | Minimize active window; press again to restore and activate it |
 | Volume/media keys | `RDPHotkeyHelper.ahk` | Keep volume/media keys acting on the local machine while the remote session has focus; also restores NumLock on connect |
@@ -23,6 +23,9 @@ Ctrl+Alt+A is intentionally not used — reserved by KeePass global auto-type.
   FQDN/name) at the top of the script.
 - `connect_workstation.ps1` — helper used by ConnectWork: finds the device tile in
   Windows App via UI Automation and invokes it.
+- `sso_helper.ps1` — helper used by ConnectWork: auto-clicks the right account in the
+  Chrome SSO account picker and closes the leftover SSO tab once the VPN is up.
+  Account email and tab-title pattern are parameters.
 - `RDPHotkeyHelper.ahk` — media/volume key pass-to-local helper.
 - `change_playback_device.ahk` — audio device cycler; uses `nircmd.exe` (bundled).
   Win+key combos cannot be used for this: msrdc's low-level keyboard hook consumes

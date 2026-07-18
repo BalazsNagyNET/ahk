@@ -10,6 +10,7 @@ WorkstationName := "D-SGC-13241"
 FortiWinTitle := "FortiClient - Zero Trust Fabric Agent"
 WindowsAppUri := "shell:AppsFolder\MicrosoftCorporationII.Windows365_8wekyb3d8bbwe!Windows365"
 VpnTimeoutSec := 180
+SsoEmail := "nagybal@eurowag.com"
 
 ^!w:: {
     ; VPN already up? Then go straight to the workstation.
@@ -69,6 +70,11 @@ VpnTimeoutSec := 180
             break
     }
 
+    ; Auto-pick the account in the Chrome SSO tab (background; harmless if
+    ; the picker never shows because SSO goes through silently)
+    Run 'powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "'
+        . A_ScriptDir '\sso_helper.ps1" -Mode ClickAccount -Email "' SsoEmail '"', , "Hide"
+
     ; Wait for the tunnel: workstation becomes reachable (SSO may need input)
     TrayTip "Waiting for SSO / tunnel (max " VpnTimeoutSec "s)...", "Connect Work", 1
     StartTime := A_TickCount
@@ -82,6 +88,10 @@ VpnTimeoutSec := 180
         Sleep 3000
     }
     TrayTip "VPN connected - opening workstation...", "Connect Work", 1
+    ; Close the leftover SSO/success tab in Chrome
+    Sleep 1500
+    RunWait 'powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "'
+        . A_ScriptDir '\sso_helper.ps1" -Mode CloseTab', , "Hide"
     WinMinimize FortiWinTitle
     OpenWorkstation()
 }
