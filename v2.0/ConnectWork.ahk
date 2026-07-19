@@ -92,7 +92,9 @@ SsoEmail := "nagybal@eurowag.com"
     Sleep 1500
     RunWait 'powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "'
         . A_ScriptDir '\sso_helper.ps1" -Mode CloseTab', , "Hide"
-    WinMinimize FortiWinTitle
+    ; Console may already be gone (closes to tray after connect)
+    if WinExist(FortiWinTitle)
+        WinMinimize
     OpenWorkstation()
 }
 
