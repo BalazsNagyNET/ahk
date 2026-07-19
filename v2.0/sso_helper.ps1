@@ -4,7 +4,7 @@
 param(
     [Parameter(Mandatory)][ValidateSet('ClickAccount','CloseTab')][string]$Mode,
     [string]$Email = "nagybal@eurowag.com",
-    [string]$TabPattern = '^(Sign in to your account|FortiClient|Fortinet|SAML|Login Succeeded)',
+    [string]$TabPattern = '^(Sign in to your account|FortiClient|Fortinet|SAML|Login Succeeded|localhost:\d+/\?tokenid=)',
     [int]$TimeoutSec = 90
 )
 
