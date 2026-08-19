@@ -33,16 +33,17 @@ if (-not $proc) { Write-Error "Windows App window not found"; exit 1 }
 Start-Sleep -Seconds 1
 
 $root = [System.Windows.Automation.AutomationElement]::FromHandle($proc.MainWindowHandle)
-$nameCond = New-Object System.Windows.Automation.PropertyCondition(
-    [System.Windows.Automation.AutomationElement]::NameProperty, $DeviceName)
 
 # Poll for the device tile (the embedded web UI needs time to render).
-# Several elements carry the device name; the full card is the largest one
-# that supports InvokePattern ("Select the full card to open it").
+# The card name is not the bare device name anymore (e.g. "Connect to
+# D-SGC-13241. Press Enter to connect."), so match by substring; the full
+# card is the largest element that supports InvokePattern.
 $deadline = (Get-Date).AddSeconds(45)
 $tile = $null
 while ((Get-Date) -lt $deadline) {
-    $candidates = $root.FindAll([System.Windows.Automation.TreeScope]::Descendants, $nameCond)
+    $candidates = $root.FindAll([System.Windows.Automation.TreeScope]::Descendants,
+        [System.Windows.Automation.Condition]::TrueCondition) |
+        Where-Object { $_.Current.Name -like "*$DeviceName*" }
     $tile = $candidates | Where-Object {
         $_.GetSupportedPatterns().ProgrammaticName -contains 'InvokePatternIdentifiers.Pattern'
     } | Sort-Object { $_.Current.BoundingRectangle.Width * $_.Current.BoundingRectangle.Height } -Descending |
